@@ -4,6 +4,9 @@
   let spotSectionHeight = getInnerHeight(spotSection);
   let animate = new AnimateCustom();
 
+  let commonSection = document.querySelectorAll(".js-common-section");
+  let headerHeight = getInnerHeight(document.querySelector(".js-header"));
+
   function getInnerHeight(elm) {
     var computed = getComputedStyle(elm),
       padding = parseInt(computed.paddingTop) + parseInt(computed.paddingBottom);
@@ -25,10 +28,19 @@
     duration: 0.5,
     ease: animate.defaultEasing.Power2.easeOut,
     onScrolling: (current) => {
-      if (isElementInViewport(spotSection)) {
+      if (isElementInViewport(spotSection, headerHeight)) {
         let percent = current / spotSectionHeight;
         spotSection.style.backgroundPosition = ` center calc(${spotSectionHeight}px * ${percent})`;
         spotTitle.style.transform = `translate(0px,  ${100 * percent}%) `;
+      }
+      for (let i = 0; i < commonSection.length; i++) {
+        const element = commonSection[i];
+        if (isElementInViewport(element, headerHeight)) {
+          let imageWrapComponents = element.querySelectorAll(".js-image-wrap");
+          imageWrapComponents.forEach((item) => {
+            item.classList.add("is-active");
+          });
+        }
       }
     },
   });
